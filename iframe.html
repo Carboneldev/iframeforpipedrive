@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEW Create a job</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            overflow: hidden; 
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px;
+            width: 90%; 
+            height: 100vh; 
+            background: #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; 
+        }
+          
+        .fields {
+            display: flex;
+            white-space: nowrap;
+        }
+        .fields input[type="time"] {
+            width: 50%;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            background: #f0f0f0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background: #fff;
+            color: #333;
+        }
+        .block {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn{
+    width: auto;
+    padding: 10px 20px;
+    background-color: #ffcc00;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    
+}
+        button:hover {
+            background-color: #d4a500;
+        }
+
+        .message {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+    </style>
+</head>
+<body>
+    <form id="deal-form">
+        <div class="container" id="form-container">
+            <!-- First Block -->
+            <div class="block">
+                <h2>Client details</h2>
+                <div class="form-group">
+                    <div class="fields">
+                        <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+                        <input type="text" id="second_name" name="second_name" placeholder="Last Name" required>
+                    </div>
+                    <input type="tel" id="phone" name="phone" placeholder="Phone" required>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                </div>
+            </div>
+            <!-- Second Block -->
+            <div class="block">
+                <h2>Job details</h2>
+                <div class="form-group">
+                    <div class="fields">
+                        <select id="job_type" name="job_type" required>
+                            <option value="">Select Job Type</option>
+                            <option value="19">Repair</option>
+                            <option value="20">Installation</option>
+                            <option value="21">Maintenance</option>
+                        </select>
+                        <select id="job_source" name="job_source" required>
+                            <option value="">Select Job Source</option>
+                            <option value="22">Online</option>
+                            <option value="23">Referral</option>
+                            <option value="24">Advertisement</option>
+                        </select>
+                    </div>
+                    <textarea id="job_description" name="job_description" rows="4" placeholder="Job Description" required></textarea>
+                </div>
+            </div>
+            <!-- Third Block -->
+            <div class="block">
+                <h2>Service Location</h2>
+                <div class="form-group">
+                    <input type="text" id="address" name="address" placeholder="Address" required>
+                    <input type="text" id="city" name="city" placeholder="City" required>
+                    <input type="text" id="state" name="state" placeholder="State" required>
+                    <div class="fields">
+                        <input type="text" id="zip_code" name="zip_code" placeholder="Zip-code" required>
+                        <select id="area" name="area" required>
+                            <option value="">Select Area</option>
+                            <option value="15">North</option>
+                            <option value="16">South</option>
+                            <option value="17">East</option>
+                            <option value="18">West</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- Fourth Block -->
+            <div class="block">
+                <h2>Scheduled</h2>
+                <div class="form-group">
+                    <input type="date" id="start_date" name="start_date" required>
+                    <div class="fields">
+                        <input type="time" id="start_time" name="start_time" required>
+                        <input type="time" id="end_time" name="end_time" required>
+                    </div>
+                    <select id="test_select" name="test_select" required>
+                        <option value="">Select Option</option>
+                        <option value="25">Option 1</option>
+                        <option value="26">Option 2</option>
+                        <option value="27">Option 3</option>
+                    </select>
+                </div>
+            </div>
+            <div class="contbtn">
+            <button type="submit" class="btn">Create job</button>
+            </div>
+        </div>
+ 
+    </form>
+    <div class="message" id="message">
+        <p>Job is created! <a href="#" id="deal-link" target="_blank">View Deal in Workiz</a></p>
+    </div>
+   
+
+    <script>
+        document.getElementById('deal-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = {
+                title: `Deal for ${document.getElementById('first_name').value} ${document.getElementById('second_name').value}`,
+                "d4c45bdcf5aa969062dae8e3c48fefa628f8338a": document.getElementById('first_name').value,
+                "7e1ff918cc4101c48487e04ac08efc837d900ec5": document.getElementById('second_name').value,
+                "0719fabbf82188ee3f14fbd9e9e84deb6b5391fc": document.getElementById('phone').value,
+                "75b53ff193267f29cb311d6b528b0c467e75346e": document.getElementById('email').value,
+                "f846642b165d4a284e528435a7402a207a4f0fda": document.getElementById('job_description').value,
+                "89ed3c08cdf056946575540942e854d08867f63c": document.getElementById('job_source').value,
+                "35c7e017e32d0d8dbbb47388886816ee4fccb01e": document.getElementById('job_type').value,
+                "55419af0b582a1a047333bc6b646b38625fb5f0a": document.getElementById('area').value,
+                "ac9c0cb6f5b44a57dcf6ff152a8af510428b563b": document.getElementById('zip_code').value,
+                "292bec7176d3514949b40649005de0c59220b11c": document.getElementById('state').value,
+                "1f874070cb402f7fced6d46ea66e42223ca5d761": document.getElementById('address').value,
+                "9a0d890610bcbb29675387a626bc07470a4e1ca8": document.getElementById('city').value,
+                "222c19876d50ff886ca78a15e0b74f4a9810c75a": document.getElementById('test_select').value,
+                "123fe08b8c9de22beb7d9f151b1ba2bc4694fa7b": document.getElementById('start_time').value,
+                "a21f900b7bb0df841c5737ec4c5de3cf2cadc9ea": document.getElementById('start_date').value,
+                "0cb9608504159c6b3c3c3e92e33160fe1eac453f": document.getElementById('end_time').value
+            };
+
+            const response = await fetch('https://carboneldev-sandbox.pipedrive.com/api/v1/deals?api_token=8d87bdef680aaead77913d5670e3caf0a257cdc3', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result && result.data && result.data.id) {
+                const dealId = result.data.id;
+                const dealLink = `https://carboneldev-sandbox.pipedrive.com/deal/${dealId}`;
+                
+                document.getElementById('form-container').style.display = 'none';
+                const message = document.getElementById('message');
+                const dealLinkElement = document.getElementById('deal-link');
+                dealLinkElement.href = dealLink;
+                message.style.display = 'block';
+            } else {
+                console.error('Failed to create deal:', result);
+            }
+        });
+
+       
+    </script>
+</body>
+</html>
