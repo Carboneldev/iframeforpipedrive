@@ -1,13 +1,14 @@
 {
   "name": "iframepipedrive",
   "version": "1.0.0",
-  "description": "Your app description",
-  "main": "api/server.js",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "start": "node api/server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2"
   }
 }
