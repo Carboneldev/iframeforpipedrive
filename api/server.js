@@ -2,8 +2,12 @@ require('dotenv').config();
 
 const express = require('express');
 const axios = require('axios');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3002;
+
+// Настройка сервера для обслуживания статических файлов
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Обработчик для Callback URL
 app.get('/pipedrive/callback', async (req, res) => {
@@ -12,14 +16,18 @@ app.get('/pipedrive/callback', async (req, res) => {
         return res.status(400).send('No authorization code provided.');
     }
 
+    console.log('Authorization code received:', code);
+
     try {
         const response = await axios.post('https://oauth.pipedrive.com/oauth/token', {
             grant_type: 'authorization_code',
             code: code,
-            redirect_uri: `${process.env.BASE_URL}/pipedrive/callback`,
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET
+            redirect_uri: `${process.env.BASE_URL}/pipedrive/callback`, // Используем переменные окружения
+            client_id: process.env.CLIENT_ID, // Используем переменные окружения
+            client_secret: process.env.CLIENT_SECRET // Используем переменные окружения
         });
+
+        console.log('Response from Pipedrive token exchange:', response.data);
 
         const { access_token } = response.data;
 
@@ -35,7 +43,7 @@ app.get('/pipedrive/callback', async (req, res) => {
 
 // Обработчик для корневого URL
 app.get('/', (req, res) => {
-    res.send('Welcome to the API server!');
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 app.listen(port, () => {
