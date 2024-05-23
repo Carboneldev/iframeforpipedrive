@@ -17,6 +17,6 @@
       }
     ],
     "env": {
-      "BASE_URL": "https://your-vercel-deployment-url.vercel.app"
+      "BASE_URL": "https://iframe-pipedrive-carboneldev-carboneldevs-projects.vercel.app/"
     }
   }
