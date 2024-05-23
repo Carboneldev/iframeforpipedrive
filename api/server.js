@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3000;
 
 // Обработчик для Callback URL
 app.get('/pipedrive/callback', async (req, res) => {
@@ -14,31 +14,18 @@ app.get('/pipedrive/callback', async (req, res) => {
         const response = await axios.post('https://oauth.pipedrive.com/oauth/token', {
             grant_type: 'authorization_code',
             code: code,
-            redirect_uri: 'https://1d31-2a01-e0a-a9e-9f30-adfe-4bb0-66ea-60b.ngrok-free.app/pipedrive/callback', // Обновите на текущий ngrok URL
-            client_id: '9eb24d108673c154', // Ваш фактический Client ID
-            client_secret: '3d1be9d537a426631b267bfb0c6a5191155f0d73' // Ваш фактический Client Secret
+            redirect_uri: `${process.env.BASE_URL}/pipedrive/callback`, // Используем переменную окружения
+            client_id: 'YOUR_CLIENT_ID',
+            client_secret: 'YOUR_CLIENT_SECRET'
         });
 
         const { access_token } = response.data;
 
-        // Сохраните токен доступа в вашей базе данных или используйте его для взаимодействия с API Pipedrive
         console.log('Access Token:', access_token);
 
         res.send('Authorization successful! You can close this tab.');
     } catch (error) {
-        if (error.response) {
-            // Сервер ответил статусом, отличным от 2xx
-            console.error('Error response data:', error.response.data);
-            console.error('Error response status:', error.response.status);
-            console.error('Error response headers:', error.response.headers);
-        } else if (error.request) {
-            // Запрос был сделан, но ответа не получено
-            console.error('Error request data:', error.request);
-        } else {
-            // Произошла ошибка в настройке запроса
-            console.error('Error message:', error.message);
-        }
-        console.error('Error config:', error.config);
+        console.error('Error exchanging authorization code for access token:', error);
         res.status(500).send('An error occurred during the authorization process.');
     }
 });
@@ -51,3 +38,4 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+
