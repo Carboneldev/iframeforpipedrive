@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Обработчик для Callback URL
 app.get('/pipedrive/callback', async (req, res) => {
@@ -29,6 +29,11 @@ app.get('/pipedrive/callback', async (req, res) => {
         console.error('Error exchanging authorization code for access token:', error);
         res.status(500).send('An error occurred during the authorization process.');
     }
+});
+
+// Обработчик для корневого URL
+app.get('/', (req, res) => {
+    res.send('Welcome to the API server!');
 });
 
 app.listen(port, () => {
