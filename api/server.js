@@ -9,6 +9,7 @@ const port = process.env.PORT || 3002;
 app.get('/pipedrive/callback', async (req, res) => {
     const { code } = req.query;
     if (!code) {
+        console.error('No authorization code provided.');
         return res.status(400).send('No authorization code provided.');
     }
 
@@ -28,7 +29,7 @@ app.get('/pipedrive/callback', async (req, res) => {
 
         res.send('Authorization successful! You can close this tab.');
     } catch (error) {
-        console.error('Error exchanging authorization code for access token:', error);
+        console.error('Error exchanging authorization code for access token:', error.response ? error.response.data : error.message);
         res.status(500).send('An error occurred during the authorization process.');
     }
 });
@@ -41,4 +42,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
-
