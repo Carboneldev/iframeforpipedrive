@@ -9,7 +9,6 @@ const port = process.env.PORT || 3002;
 app.get('/pipedrive/callback', async (req, res) => {
     const { code } = req.query;
     if (!code) {
-        console.error('No authorization code provided.');
         return res.status(400).send('No authorization code provided.');
     }
 
@@ -17,9 +16,9 @@ app.get('/pipedrive/callback', async (req, res) => {
         const response = await axios.post('https://oauth.pipedrive.com/oauth/token', {
             grant_type: 'authorization_code',
             code: code,
-            redirect_uri: `${process.env.BASE_URL}/pipedrive/callback`, // Используем переменные окружения
-            client_id: process.env.CLIENT_ID, // Используем переменные окружения
-            client_secret: process.env.CLIENT_SECRET // Используем переменные окружения
+            redirect_uri: `${process.env.BASE_URL}/pipedrive/callback`,
+            client_id: process.env.CLIENT_ID,
+            client_secret: process.env.CLIENT_SECRET
         });
 
         const { access_token } = response.data;
